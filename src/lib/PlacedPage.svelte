@@ -1,31 +1,31 @@
 <script lang="ts">
-    import Dossier from './Dossier.svelte';
+    import Page from './Page.svelte';
     import { fade } from 'svelte/transition';
+    import { receive, send } from './transition';
 
     export let key: string;
-    export let title = '';
     let zoomed = false;
-    let open = false;
 </script>
 
 <button class="positioned" on:click|preventDefault={() => zoomed = true}>
     {#if !zoomed}
-        <Dossier {key} {title} alignRight>
-            <slot name="cover" slot="cover" />
-            <slot name="left" slot="left" />
-            <slot />
-        </Dossier>
+        <div class="transition" in:receive={{key}} out:send={{key}}>
+            <Page>
+                <slot />
+            </Page>
+        </div>
     {/if}
 </button>
 
 {#if zoomed}
     <div class="overlay-container">
-        <button class="overlay" on:click={() => open = false} transition:fade={{duration: 400}} />
-        <Dossier {key} {title} {open} zoomed on:closeanimationend={() => !open && (zoomed = false)} on:introend={() => open = true}>
-            <slot name="cover" slot="cover" />
-            <slot name="left" slot="left" />
-            <slot />
-        </Dossier>
+        <button class="overlay" on:click={() => zoomed = false} transition:fade={{duration: 400}} />
+        
+        <div class="transition" in:receive={{key}} out:send={{key}}>
+            <Page>
+                <slot />
+            </Page>
+        </div>
     </div>
 {/if}
 
@@ -49,7 +49,8 @@
         box-sizing: border-box;
         translate: var(--dossier-translate);
         font-size: 0.6em;
-        width: 40em;
+        width: 35em;
         cursor: pointer;
     }
+
 </style>

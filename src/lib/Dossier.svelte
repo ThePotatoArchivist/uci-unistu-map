@@ -3,13 +3,15 @@
     import { receive, send } from './transition';
 
     export let key: string;
+    export let alignRight = false;
+    export let title = '';
     export let open = false;
     export let zoomed = false;
     
     const dispatch = createEventDispatcher<{closeanimationend: null}>()
 </script>
 
-<button class="container" class:closed={!open} class:zoomed on:click in:receive={{key}} out:send={{key}} on:introend>
+<div class="container" class:closed={!open} class:zoomed class:alignRight in:receive={{key}} out:send={{key}} on:introend>
     <div class="cover right back">
         <div class="tab bottom" />
         <slot name="cover" />
@@ -19,24 +21,28 @@
         <slot name="left" />
     </div>
     <div class="cover right">
-        <div class="tab top" />
+        <div class="tab top">
+            <div class="title">{title}</div>
+        </div>
         <slot />
     </div>
-</button>
+</div>
 
 <style>
     .container {
-        height: 100%;
-        width: 100%;
+        aspect-ratio: 5 / 3;
+        width: 80em;
         box-sizing: border-box;
         position: relative;
         perspective: 2000px;
     }
-    
-    .zoomed {
-        aspect-ratio: 4 / 3;
-        width: 95vmin;
-        height: auto;
+
+    .container.closed {
+        pointer-events: none;
+    }
+
+    .alignRight {
+        translate: -50% 0;
     }
 
     .cover {
@@ -45,10 +51,12 @@
         bottom: 0;
         width: 50%;
         background-color: #f0d197;
+        display: grid;
+        box-sizing: border-box;
     }
     
     .left {
-        left: 5%;
+        left: 2.6%;
         transform-origin: right center;
         border-top-left-radius: 15px;
     }
@@ -84,7 +92,7 @@
     .tab {
         position: absolute;
         width: 5%;
-        background-color: #f0d197;
+        background-color: #f0d197;;
     }
     
     .left .tab {
@@ -99,6 +107,7 @@
     .right .tab {
         left: 99.5%;
         border-radius: 0 999px 999px 0;
+       
     }
     
     .tab.top {
@@ -109,5 +118,19 @@
     .tab.bottom {
         bottom: 0;
         height: 66.7%;
+    }
+
+    .title {
+        position: absolute;
+        width: 200%;
+        height: 100%;
+        top: 0;
+        right: 0;
+        writing-mode: vertical-lr;
+        text-orientation: sideways;
+        text-align: center;
+        font-size: 1.4em;
+        display: grid;
+        place-items: center
     }
 </style>
