@@ -4,60 +4,73 @@
 
     export let key: string;
     export let open = false;
+    export let zoomed = false;
     
     const dispatch = createEventDispatcher<{closeanimationend: null}>()
 </script>
 
-<button class="container" class:closed={!open} on:click in:receive={{key}} out:send={{key}} on:introend>
+<button class="container" class:closed={!open} class:zoomed on:click in:receive={{key}} out:send={{key}} on:introend>
     <div class="cover right back">
+        <div class="tab bottom" />
         <slot name="cover" />
     </div>
     <div class="cover left" on:transitionend={() => dispatch('closeanimationend')}>
+        <div class="tab bottom" />
         <slot name="left" />
     </div>
     <div class="cover right">
+        <div class="tab top" />
         <slot />
     </div>
 </button>
 
 <style>
     .container {
-        /* aspect-ratio: 4 / 3; */
         height: 100%;
         width: 100%;
         box-sizing: border-box;
         position: relative;
         perspective: 2000px;
     }
+    
+    .zoomed {
+        aspect-ratio: 4 / 3;
+        width: 95vmin;
+        height: auto;
+    }
 
     .cover {
         position: absolute;
         top: 0;
         bottom: 0;
-        background-color: orange;
-    }
-    
-    .cover {
         width: 50%;
+        background-color: #f0d197;
     }
     
     .left {
-        left: 0;
+        left: 5%;
         transform-origin: right center;
+        border-top-left-radius: 15px;
     }
     
+    .right {
+        left: 50%;
+        border-bottom-right-radius: 15px;
+    }
+
     .left, .back {
+        width: 47.5%;
         transition: rotate 0.6s;
         backface-visibility: hidden;
     }
     
     .back {
         transform-origin: left center;
+        border-radius: 0;
         z-index: 10;
-    }
-    
-    .right {
-        left: 50%;
+        border-top-right-radius: 15px;
+        border-bottom-right-radius: 0;
+        filter: drop-shadow(3px 0 3px #0003);
     }
     
     .closed .left, .back {
@@ -66,5 +79,35 @@
     
     .closed .back {
         rotate: y 360deg;
+    }
+    
+    .tab {
+        position: absolute;
+        width: 5%;
+        background-color: #f0d197;
+    }
+    
+    .left .tab {
+        right: 99.5%;
+        border-radius: 999px 0 0 999px;
+    }
+    
+    .left .tab, .back .tab {
+        width: 5.55%;
+    }
+    
+    .right .tab {
+        left: 99.5%;
+        border-radius: 0 999px 999px 0;
+    }
+    
+    .tab.top {
+        top: 0;
+        height: 33.3%;
+    }
+    
+    .tab.bottom {
+        bottom: 0;
+        height: 66.7%;
     }
 </style>
