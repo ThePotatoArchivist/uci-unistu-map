@@ -11,9 +11,9 @@
 <button class="positioned" on:click|preventDefault={() => zoomed = true}>
     {#if !zoomed}
         <Dossier {key} {title} alignRight>
-            <slot name="cover" slot="cover" />
-            <slot name="left" slot="left" />
-            <slot />
+            <slot name="cover" slot="cover" {open} />
+            <slot name="left" slot="left" {open} />
+            <slot {open} />
         </Dossier>
     {/if}
 </button>
@@ -22,9 +22,9 @@
     <div class="overlay-container">
         <button class="overlay" on:click={() => open = false} transition:fade={{duration: 400}} />
         <Dossier {key} {title} {open} zoomed on:closeanimationend={() => !open && (zoomed = false)} on:introend={() => open = true}>
-            <slot name="cover" slot="cover" />
-            <slot name="left" slot="left" />
-            <slot />
+            <slot name="cover" slot="cover" {open} />
+            <slot name="left" slot="left" {open} />
+            <slot {open} />
         </Dossier>
     </div>
 {/if}

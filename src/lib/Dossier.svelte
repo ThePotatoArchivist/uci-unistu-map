@@ -131,6 +131,7 @@
         text-align: center;
         font-size: 1.4em;
         display: grid;
-        place-items: center
+        place-items: center;
+        font-family: 'Special Elite', 'Courier New', Courier, monospace;
     }
 </style>
