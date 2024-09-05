@@ -231,6 +231,7 @@
         grid-template-columns: auto auto auto;
         place-content: center;
         padding: 3em;
+        box-sizing: border-box;
 
         gap: 3em;
         height: 100vh;
